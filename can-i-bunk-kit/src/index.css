@@ -1,0 +1,583 @@
+/* =========================================================
+   Can I Bunk? — styles
+   Look: "neo-brutalist". Thick black borders, hard offset
+   shadows, flat bright colours. Mostly stuff from the CSS
+   basics (borders, box-shadow, transform, @keyframes,
+   pseudo-classes) + 3 newer things, each explained where
+   it's first used:
+     1. CSS variables   --name: value;  var(--name)
+     2. Flexbox         display: flex
+     3. Grid            display: grid
+   ========================================================= */
+
+/* ---------- 1. CSS VARIABLES ----------
+   Define a value once on :root (the <html> element), use it
+   anywhere with var(--name). Change the colour here and it
+   changes across the whole site. */
+:root {
+  --bg: #fff8ec;
+  --ink: #1a1a1a;
+  --card: #ffffff;
+  --muted: #5c5c5c;
+
+  --safe: #8ee6a8;
+  --warning: #ffd166;
+  --danger: #ff8a80;
+  --accent: #b9a6ff;
+
+  --border: 3px solid var(--ink);
+  --shadow: 5px 5px 0 var(--ink);
+  --shadow-small: 2px 2px 0 var(--ink);
+  --radius: 14px;
+
+  --font: 'Space Grotesk', Arial, sans-serif;
+  --mono: 'Space Mono', 'Courier New', monospace;
+}
+
+* {
+  box-sizing: border-box; /* width now includes padding + border */
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  /* dotted notebook background: a tiny radial gradient, repeated */
+  background-image: radial-gradient(#e6dccb 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+.app {
+  max-width: 1150px;
+  margin: 0 auto;         /* centres the whole app */
+  padding: 28px 20px 40px;
+}
+
+/* ---------- HEADER ----------
+   2. FLEXBOX: display:flex puts children in a row.
+   justify-content -> spacing along the row
+   align-items     -> alignment across it (vertical here)
+   flex-wrap       -> allowed to drop to a new line on small screens */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.header h1 {
+  font-size: clamp(2.4rem, 7vw, 4rem); /* grows with screen, min 2.4rem, max 4rem */
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.qmark {
+  display: inline-block;
+  color: var(--accent);
+  -webkit-text-stroke: 2px var(--ink);
+  transform: rotate(12deg);
+  animation: wobble 2.5s ease-in-out infinite;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(12deg); }
+  50%      { transform: rotate(-6deg); }
+}
+
+.tagline {
+  margin-top: 8px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.threshold {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  background: var(--warning);
+  border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 10px 14px;
+}
+
+.threshold-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+}
+
+.threshold-input input {
+  width: 78px;
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+/* ---------- FORM CONTROLS ---------- */
+input,
+select {
+  width: 100%;
+  font: inherit;
+  padding: 9px 12px;
+  border: var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  box-shadow: var(--shadow-small);
+  background: #fffdf7;
+}
+
+/* range slider (the "what if" one) */
+input[type='range'] {
+  padding: 0;
+  border: none;
+  accent-color: var(--ink);
+  background: transparent;
+}
+
+/* ---------- BUTTONS ----------
+   :hover and :active are pseudo-classes. On :active the button
+   moves down-right and the shadow shrinks, so it looks pressed. */
+.btn {
+  font: inherit;
+  font-weight: 700;
+  padding: 9px 16px;
+  border: var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow-small);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.btn-primary { background: var(--accent); }
+.btn-present { background: var(--safe); }
+.btn-bunk    { background: var(--danger); }
+
+/* ---------- CARDS ---------- */
+.card {
+  background: var(--card);
+  border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+/* ---------- SUMMARY ---------- */
+.summary {
+  margin-bottom: 28px;
+}
+
+.verdict {
+  display: inline-block;
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border: var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-small);
+  margin-bottom: 16px;
+}
+
+.verdict-safe    { background: var(--safe); }
+.verdict-warning { background: var(--warning); }
+.verdict-danger  { background: var(--danger); }
+
+/* 3. GRID: display:grid splits the element into columns.
+   repeat(auto-fit, minmax(150px, 1fr)) means: make as many
+   columns as fit, each at least 150px wide, and share the
+   leftover space equally (1fr = one fraction). No media query needed. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column; /* stack number on top of label */
+  background: var(--card);
+  border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+}
+
+.stat-safe    { background: var(--safe); }
+.stat-warning { background: var(--warning); }
+.stat-danger  { background: var(--danger); }
+
+.stat-number {
+  font-family: var(--mono);
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+}
+
+/* ---------- MAIN LAYOUT ----------
+   Form on the left (fixed 300px), courses take the rest (1fr). */
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ---------- ADD COURSE FORM ---------- */
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky; /* stays in view while you scroll the courses */
+  top: 20px;
+}
+
+.add-form h2 {
+  font-size: 1.4rem;
+}
+
+.add-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-error {
+  background: var(--danger);
+  border: var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 500;
+  animation: shake 0.3s;
+}
+
+@keyframes shake {
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- FILTER TABS ---------- */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.tab {
+  font: inherit;
+  font-weight: 700;
+  padding: 7px 14px;
+  border: var(--border);
+  border-radius: 999px; /* huge radius = pill shape */
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.tab:hover {
+  background: #f1eadc;
+}
+
+.tab-active,
+.tab-active:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.tab-count {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+/* ---------- COURSE GRID ---------- */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.empty {
+  border: 3px dashed var(--ink);
+  border-radius: var(--radius);
+  padding: 40px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  font-weight: 500;
+}
+
+/* ---------- COURSE CARD ----------
+   Each card gets a class like .course-safe. That class sets
+   --status, and everything inside the card uses var(--status).
+   So one class change recolours the whole card. */
+.course-safe    { --status: var(--safe); }
+.course-warning { --status: var(--warning); }
+.course-danger  { --status: var(--danger); }
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-top: 12px solid var(--ink);
+  transition: transform 0.15s, box-shadow 0.15s;
+  animation: pop-in 0.3s ease-out;
+}
+
+.course-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.9); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+.course-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.course-top h3 {
+  font-size: 1.2rem;
+  line-height: 1.25;
+  margin-top: 6px;
+}
+
+.type-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--bg);
+}
+
+.delete-btn {
+  font-size: 1.4rem;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0; /* don't let flexbox squash it */
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--card);
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: var(--danger);
+}
+
+/* the big sticker number */
+.big-number {
+  align-self: flex-start;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  background: var(--status);
+  border: var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-small);
+  padding: 4px 14px;
+  transform: rotate(-2deg);
+}
+
+.big-value {
+  font-family: var(--mono);
+  font-size: 2.6rem;
+  line-height: 1.1;
+}
+
+.big-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+/* ---------- PROGRESS BAR ----------
+   position: relative on the parent, position: absolute on the
+   marker -> the marker is placed relative to the bar itself. */
+.progress {
+  position: relative;
+  height: 18px;
+  border: var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  margin-top: 18px; /* room for the marker label above */
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--status);
+  transition: width 0.4s ease;
+}
+
+.progress-marker {
+  position: absolute;
+  top: -8px;
+  bottom: -8px;
+  width: 3px;
+  background: var(--ink);
+}
+
+.progress-marker span {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.course-meta {
+  font-size: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--status);
+}
+
+.pill-danger {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.08); }
+}
+
+.course-message {
+  font-weight: 500;
+  min-height: 3em; /* keeps cards the same height-ish */
+}
+
+.course-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.course-actions .btn {
+  flex: 1; /* both buttons share the width equally */
+}
+
+/* ---------- WHAT-IF SIMULATOR ---------- */
+.what-if {
+  border-top: 2px dashed var(--ink);
+  padding-top: 12px;
+  font-size: 0.9rem;
+}
+
+.what-if label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.what-if-result {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.what-if-result.ok  { background: var(--safe); }
+.what-if-result.bad { background: var(--danger); }
+
+/* ---------- FOOTER ---------- */
+.footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: var(--border);
+  text-align: center;
+}
+
+.footer-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ---------- RESPONSIVE ----------
+   @media rules only apply when the condition is true.
+   Below 820px wide (phones, small tablets), the two-column
+   layout becomes one column and the form stops being sticky. */
+@media (max-width: 820px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .add-form {
+    position: static;
+  }
+
+  .header {
+    align-items: flex-start;
+  }
+}
